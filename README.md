@@ -52,6 +52,51 @@ Los componentes utilizados son los siguientes:
 
 Consideramos que este proyecto sirve como prototipo de lo que sería una máquina expendedora comercial que solvente las necesidades expuestas en los preliminares. El proyecto es escalable ya que ofrece la posibilidad de realizar una serie de añadidos al diseño. El principal sería el utilizar una única Raspberry para varias máquinas y Arduinos. Esto nos permitiría controlar más de una máquina con la misma Raspberry y tener una base de datos unificada. Otra ampliación interesante sería la sustitución del bot de Telegram por una aplicación móvil propia.
 
+## Instrucciones de instalación
+
+En este apéndice están las instrucciones para instalar las librerías y aplicaciones y/o configurarlas para que nuestro sistema funcione. 
+
+### Raspberry
+
+- Instalar Raspberry Pi OS: https://www.raspberrypi.com/software/
+Una vez instalado el sistema operativo dentro tendremos que instalar lo siguiente:
+- Instalar MariaDB-server
+  - sudo apt-get install mariadb-server
+- Configurar mariadb
+  - sudo mariadb
+  - Dentro de mariadb (después de escribir el comando anterior) los siguientes comandos:
+    - create database mybase;
+    - create user ‘myuser’@’localhost’ identified by ‘admin’;
+    - grant all privileges on mybase.* to ‘myuser’@’localhost’;
+    - flush privileges;
+
+-Instalar librerias de python
+  - pip install mariadb
+  - pip install pyTelegramBotAPI
+
+- Finalmente para arrancar el sistema
+  - Correr el archivo server.py
+  - Correr el archivo telegrambot.py
+  - Correr el archivo server_continuo.py 
+
+Felicidades, ¡ya tienes el servidor corriendo!
+
+Para configurar la conexión bluetooth consultar la sección Bluetooth de este documento
+
+### Arduino
+- Instalar IDE Arduino
+  - https://www.arduino.cc/en/software
+- Instalar las siguientes bibliotecas desde el IDE de Arduino:
+  - Adafruit PN532 y sus dependencias
+  - Keypad by Mark Stanley, Alexander Brevig
+  - LiquidCrystal I2C by Frank de Brabander
+    - Nosotros usamos la versión v1.1.1. Existe la v1.1.2, debería funcionar igual pero no lo hemos comprobado. En caso de que no funcione, instala la v1.1.1
+- Instalar desde link externo:
+  - PN532_HSU
+    - Descargar de este github: https://github.com/elechouse/PN532
+    - Extraer el zip y copiar cada una de las carpetas que aparecen dentro de la carpeta PN532-PN532_HSU en .\Documents\Arduino\libraries
+
+
 
 ## Fuentes consultadas
 
