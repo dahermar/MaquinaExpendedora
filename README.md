@@ -145,6 +145,8 @@ En cuanto a la Raspberry habrá que realizar los siguientes pasos:
 2. Ejecutar el archivo telegrambot.py y dejarlo en segundo plano. Si cerramos la consola perderemos la función de ejecutar comandos mediante el bot de Telegram.
 3. Ejecutar el archivo server_continuo.py. Este lo debemos ejecutar cuando el Arduino esté ya en funcionamiento. Antes de ejecutarlo se mostrará el mensaje “Inicializando sistema” en el LCD del Arduino y el led rojo del módulo HC-06 estará parpadeando. Cuando ejecutemos el archivo server_continuo.py, la conexión Bluetooth se establecerá, el LED dejará de parpadear, quedándose con la luz roja fija. Además se mostrará por la pantalla LCD que acerques el dispositivo NFC, indicando que el sistema está ya operativo.
 
+El archivo consultas_bot.py sirve para realizar una serie de consultas en la base de datos, cuyo resultado se mostrará por consola y se enviará al telegram de la persona a la que pertenezca el id que aparece almacenado. Este archivo es auxiliar y no hace falta para el flujo de ejecución del sistema.
+
 ## Fuentes consultadas
 
 Librería Telegram Bot Python:
