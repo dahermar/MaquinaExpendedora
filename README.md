@@ -81,8 +81,6 @@ Una vez instalado el sistema operativo dentro tendremos que instalar lo siguient
 
 Felicidades, ¡ya tienes el servidor corriendo!
 
-Para configurar la conexión bluetooth consultar la sección Bluetooth de este documento
-
 ### Arduino
 - Instalar IDE Arduino
   - https://www.arduino.cc/en/software
@@ -96,6 +94,44 @@ Para configurar la conexión bluetooth consultar la sección Bluetooth de este d
     - Descargar de este github: https://github.com/elechouse/PN532
     - Extraer el zip y copiar cada una de las carpetas que aparecen dentro de la carpeta PN532-PN532_HSU en .\Documents\Arduino\libraries
 
+## Configuración Bluetooth
+
+La configuración de la conexión ha sido la parte más complicada del proyecto, por lo que pondremos un tutorial de como configurarla
+
+### Bluetooth en Arduino
+
+Para realizar la conexión bluetooth seguimos los siguientes pasos. La parte más sencilla del proceso fue la del Arduino. Para ello utilizamos el módulo bluetooth HC-06. Este actuará de esclavo en la conexión, siendo la Raspberry Pi el maestro. La configuración es sencilla. El módulo HC-05 tiene 4 pines. Uno de ellos es para la alimentación de 5V, el cual ha de conectarse al pin de salida de 5v del arduino o, en su defecto a una fuente externa de 5V. Otro es para conectar a tierra. Los otros dos pines son de Tx/Rx. El pin Tx ha de conectarse con el Rx del Arduino y el Rx con el Tx. Es importante no confundirse, ya que si no prestamos atención es sencillo confundirse y asumir que hay que conectar el Tx con el Tx y el Rx con el Rx, pero de esta forma la comunicación no funcionaría. 
+
+Cabe remarcar que el código y conexiones que tenemos en el proyecto funcionaría igual utilizando un módulo HC-05 en vez del HC-06. La única diferencia es que el HC-05 puede utilizarse como esclavo y como maestro, mientras que el HC-06 solo puede ser usado como esclavo. Debido a ello, además de los mismos 4 pines que tiene el HC-06, el HC-05 dispone de dos extras: el Key y el State, que se utilizan cuando actúa como maestro. Pero como en nuestro caso lo vamos a utilizar de esclavo, si tenemos el HC-05, dejaremos estos pines sin conectar y realizaremos la misma conexión explicada previamente para el HC-06.
+
+Una vez en este punto, el Arduino no “sabe” que está conectado por bluetooth, ya que simplemente hemos conectado sus pines Tx/Rx a un dispositivo, el cual no le especificamos cual es. Entonces, el Arduino solo tendrá que escribir en Serial cuando quiera enviar un dato a la Raspberry y leer de Serial cuando quiera recibirlo. Esto es debido a que, al tener sus pines Tx/Rx conectados con el módulo HC-06, simplemente está redirigiendo su comunicación Serial a este módulo. Es el HC-06 el encargado de enviar lo que reciba desde el Tx del Arduino en Serial al dispositivo con el que esté conectado por Bluetooth y enviar al Rx del Arduino lo que reciba del dispositivo.
+
+### Bluetooth en Raspberry Pi
+
+La parte de la conexión Bluetooth fue la que nos trajo más problemas. Consultamos multitud de tutoriales que utilizaban bibliotecas y aplicaciones que o bien ya no existían o habían cambiado tanto que esos métodos ya no funcionaban. Finalmente encontramos el siguiente vídeo (https://www.youtube.com/watch?v=hBqmAM1tZR8&t=725s),  que nos sirvió de base para configurar correctamente la conexión. Aunque hubo una sección que no nos funcionó, la de emparejar el dispositivo, conseguimos hacerlo utilizando la herramienta Blueman, como explicaremos a continuación.
+
+En primer lugar lo que haremos será consultar la MAC del HC-06. Para ello, en primer lugar deberemos conectarlo al arduino y darle corriente. La luz roja deberá parpadear. A continuación utilizaremos la herramienta bluetoothctl incluida en Raspberry Pi OS. En una consola escribiremos los siguientes comandos:
+
+- sudo bluetoothctl
+- agent on
+- scan on
+
+A continuación nos aparecerá una lista de todos los dispositivos bluetooth que detecta, indicando su nombre y su MAC. Buscaremos el HC-06 (o HC-05) y apuntaremos su MAC, ya que la necesitaremos más adelante. Ahora tenemos que emparejar, que no conectar, el HC-06 con la Raspberry Pi. Esta es la sección del vídeo que no nos funcionaba. En el tutorial él utiliza la aplicación de bluetooth que aparece arriba a la derecha y escanea los dispositivos. En nuestro caso no nos aparecía el módulo bluetooth, puede que por utilizar el HC-06, ya que en el vídeo utiliza el HC-05. Para poder emparejarlo, utilizamos la herramienta Blueman. Esta herramienta es una aplicación con interfaz gráfica para la gestión de conexiones bluetooth. Para instalarla hay que ejecutar los siguientes comandos:
+
+- sudo apt-get install pi-bluetooth
+- sudo apt-get install bluetooth bluez blueman
+
+Tras reiniciar el sistema ya tendremos acceso a Blueman. Podremos ejecutar la aplicación pulsando en el nuevo símbolo de bluetooth que aparecerá arriba a la derecha, no pulsar sobre el símbolo de bluetooth que había antes de instalar Blueman. Una vez abierto ahí sí aparecerá el HC-06 tras escanear los dispositivos. Tendremos que hacer click derecho sobre él y pulsar en emparejar (pair). No pulsar sobre conectar, ya que no es la función que queremos y dará un error. Ahora ya tenemos el módulo emparejado. Todos estos pasos hay que realizarlos una sola vez, aunque reiniciemos el sistema. El módulo permanecerá siempre emparejado.
+
+Ahora ya tenemos el módulo conectado, pero tenemos que descubrir cómo pasar datos a través de él. Para ello utilizaremos el protocolo rfcomm. Rfcomm es un protocolo construido sobre L2CAP emula conexión en serie. Puede emular hasta sesenta conexiones de manera simultánea. Para utilizarlo tenemos que asociar una de estas conexiones a la MAC del HC-06, la cual hemos apuntado previamente. Para ello ejecutaremos el siguiente comando en una consola:
+
+- sudo rfcomm bind n MAC
+
+Ejecutaremos el comando sustituyendo “n” por un entero entre 0 y 59 y “MAC” por la MAC del HC-06. De esta forma habremos mapeado la salida “n” del protocolo rfcomm a la MAC del módulo bluetooth. De esta manera, cuando escribamos en Serial sobre la salida 6 del protocolo rfcomm, los datos llegarán al módulo bluetooth y se transmitirán al Arduino. Para enviar información a través del módulo bluetooth usando el protocolo rfcomm en python hay que escribir la siguiente instrucción:
+
+- bluetooth = serial.Serial(“/dev/rfcommN”, 9600)
+
+Cabe destacar que hay que sustituir la N final de “/dev/rfcommN” por el número de salida que hemos asignado al HC-06. Además en este ejemplo establecemos los Baudios a 9600 y tienen que coincidir con los que hemos puesto en la conexión serial del Arduino.
 
 
 ## Fuentes consultadas
