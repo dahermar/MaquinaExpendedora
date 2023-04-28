@@ -134,6 +134,16 @@ Ejecutaremos el comando sustituyendo “n” por un entero entre 0 y 59 y “MAC
 
 Cabe destacar que hay que sustituir la N final de “/dev/rfcommN” por el número de salida que hemos asignado al HC-06. Además en este ejemplo establecemos los Baudios a 9600 y tienen que coincidir con los que hemos puesto en la conexión serial del Arduino.
 
+## Instrucciones de ejecución
+
+Para que el sistema funcione primero tendremos que cargar el código en el Arduino. Para ello hay que desconectar los pines Tx/Rx del módulo Bluetooth HC-06, ya que los que utiliza para cargar el programa. Una vez cargado, habrá que volver a conectarlos para poder hacer uso del módulo Bluetooth. La carga del programa solo se deberá realizar una vez. Para iniciar la ejecución del código Arduino, solo habrá que alimentar la placa.
+
+
+En cuanto a la Raspberry habrá que realizar los siguientes pasos:
+
+1. Ejecutar el archivo iniciar_BD.py para inicializar la base de datos.
+2. Ejecutar el archivo telegrambot.py y dejarlo en segundo plano. Si cerramos la consola perderemos la función de ejecutar comandos mediante el bot de Telegram.
+3. Ejecutar el archivo server_continuo.py. Este lo debemos ejecutar cuando el Arduino esté ya en funcionamiento. Antes de ejecutarlo se mostrará el mensaje “Inicializando sistema” en el LCD del Arduino y el led rojo del módulo HC-06 estará parpadeando. Cuando ejecutemos el archivo server_continuo.py, la conexión Bluetooth se establecerá, el LED dejará de parpadear, quedándose con la luz roja fija. Además se mostrará por la pantalla LCD que acerques el dispositivo NFC, indicando que el sistema está ya operativo.
 
 ## Fuentes consultadas
 
