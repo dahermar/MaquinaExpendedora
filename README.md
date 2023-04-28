@@ -1,11 +1,12 @@
 # MaquinaExpendedora
 Proyecto que combina el uso de una Raspberry Pi 3 y un Arduino Uno para construir una máquina expendedora que funciona mediante identificación NFC, sin necesidad de realizar un pago en el momento
 
-Integrantes
+## Integrantes
 
-Daniel Hernández Martínez
-David Bugoi
-Preliminares
+- Daniel Hernández Martínez
+- David Bugoi
+
+## Preliminares
 
 La gran mayoría de las máquinas expendedoras del mercado funcionan de la siguiente manera: introduces una cantidad de dinero o pagas con tarjeta bancaria y te proporciona un producto que seleccionas a través de un teclado. Sin embargo, nuestro proyecto pretende realizar una máquina expendedora con una serie de cambios respecto a lo estándar. 
 
@@ -19,7 +20,7 @@ Otra funcionalidad del sistema será la integración de un bot de telegram. Con 
 Uno de los principales problemas de las máquinas expendedoras actuales es que requieren de una conexión a Internet para disponer de todas sus funcionalidades, principalmente del pago con tarjeta. Esto provoca que en lugares en los que la conexión a Internet no es muy buena, impida a los clientes obtener productos mediante el pago con tarjeta. Esto mismo sucede en nuestra facultad y es la principal motivación que hemos tenido para realizar este proyecto, el cual solventará dicho problema.
 
 
-Cuerpo
+## Cuerpo
 
 Nuestro sistema está compuesto por una Raspberry Pi 3 B+, un Arduino Uno y un bot de Telegram. La Raspberry tiene la función de almacenar la base de datos de los clientes y productos además de implementar el bot de Telegram. El Arduino tiene implementada una máquina de estados y realiza la interacción con el usuario y los productos mediante sus componentes electrónicos.  El bot ofrece al usuario la capacidad de consultar su saldo en cualquier momento y obtener información de las transacciones a tiempo real.
 
@@ -35,24 +36,24 @@ El usuario comienza su interacción con el sistema escaneando el dispositivo NFC
 
 Los componentes utilizados son los siguientes:
 
-Módulo NFC PN532
+- Módulo NFC PN532
 
-Módulo Bluetooth HC-06
+- Módulo Bluetooth HC-06
 
-Servomotores 9g 180º
+- Servomotores 9g 180º
 
-Display LCD 1602
+- Display LCD 1602
 
-Teclado Matricial
+- Teclado Matricial
 
 
 
-Conclusiones relevantes
+## Conclusiones relevantes
 
 Consideramos que este proyecto sirve como prototipo de lo que sería una máquina expendedora comercial que solvente las necesidades expuestas en los preliminares. El proyecto es escalable ya que ofrece la posibilidad de realizar una serie de añadidos al diseño. El principal sería el utilizar una única Raspberry para varias máquinas y Arduinos. Esto nos permitiría controlar más de una máquina con la misma Raspberry y tener una base de datos unificada. Otra ampliación interesante sería la sustitución del bot de Telegram por una aplicación móvil propia.
 
 
-Fuentes consultadas
+## Fuentes consultadas
 
 Librería Telegram Bot Python:
 
