@@ -93,6 +93,7 @@ Felicidades, ¡ya tienes el servidor corriendo!
   - PN532_HSU
     - Descargar de este github: https://github.com/elechouse/PN532
     - Extraer el zip y copiar cada una de las carpetas que aparecen dentro de la carpeta PN532-PN532_HSU en .\Documents\Arduino\libraries
+ - Para poder cargar el código en el Arduino habrá que desconectar los pines Tx/Rx del módulo Bluetooth HC-06, ya que los que utiliza para cargar el programa. Una vez cargado, habrá que volver a conectarlos para poder hacer uso del módulo Bluetooth.
 
 ## Configuración Bluetooth
 
